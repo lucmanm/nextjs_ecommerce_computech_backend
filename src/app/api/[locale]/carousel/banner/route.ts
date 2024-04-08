@@ -2,14 +2,19 @@ import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request, { params }: { params: { locale: string } }) {
+
     const checklanguage = await prisma.language.findFirst({
         where: {
             code: params.locale
         }
     })
 
-    const productsData = await prisma.product.findMany()
+    const sliderData = await prisma.slider.findMany({
+        where: {
+            languageId: checklanguage?.id
+        }
+    })
 
-    return NextResponse.json({ products: productsData }, { status: 200 })
+    return NextResponse.json(sliderData, { status: 200 })
 }
 
