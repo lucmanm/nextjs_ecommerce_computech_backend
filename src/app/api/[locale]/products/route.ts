@@ -7,7 +7,7 @@ export async function GET(request: Request, { params }: { params: { locale: stri
             code: params.locale
         }
     })
-
+    if (!checklanguage) return
     const productsData = await prisma.product.findMany()
 
     return NextResponse.json({ products: productsData }, { status: 200 })
