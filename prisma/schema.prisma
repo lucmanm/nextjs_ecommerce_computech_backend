@@ -56,30 +56,31 @@ model VerificationToken {
 }
 
 model Category {
-  id         String    @id @default(uuid())
-  name       String
-  imageUrl   String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  languageId String
-  language   Language  @relation(fields: [languageId], references: [id])
-  product    Product[]
+  id           String    @id @default(uuid())
+  name         String    @unique
+  imageUrl     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  languageCode String
+  language     Language  @relation(fields: [languageCode], references: [languageCode])
+  product      Product[]
 }
 
 model Brand {
-  id         String    @id @default(uuid())
-  name       String
-  imageUrl   String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  languageId String
-  language   Language  @relation(fields: [languageId], references: [id])
-  product    Product[]
+  id           String    @id @default(uuid())
+  name         String    @unique
+  imageUrl     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  languageId   String
+  product      Product[]
+  languageCode String
+  language     Language  @relation(fields: [languageCode], references: [languageCode])
 }
 
 model Product {
   id                 String   @id @default(uuid())
-  model              String
+  model              String   @unique
   stock              Int
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
@@ -89,29 +90,29 @@ model Product {
   taxValue           Decimal
   brandId            String
   categoryId         String
-  shortDescriptionAr String
-  shortDescriptionEn String
+  shortDescriptionAr String   @unique
+  shortDescriptionEn String   @unique
   Brand              Brand    @relation(fields: [brandId], references: [id])
   category           Category @relation(fields: [categoryId], references: [id])
 }
 
 model Slider {
-  id         String   @id @default(uuid())
-  name       String
-  imageUrl   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  languageId String
-  language   Language @relation(fields: [languageId], references: [id])
+  id           String    @id @default(uuid())
+  name         String
+  imageUrl     String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  languageId   String
+  Language     Language? @relation(fields: [languageCode], references: [languageCode])
+  languageCode String?
 }
 
 model Language {
-  id          String     @id @default(uuid())
-  code        String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  description String
-  Brand       Brand[]
-  Category    Category[]
-  Slider      Slider[]
+  languageCode String     @unique
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  languageName String
+  Brand        Brand[]
+  Category     Category[]
+  Slider       Slider[]
 }

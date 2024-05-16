@@ -1,12 +1,13 @@
-import React from 'react'
+import UploadFile from "./_components/UploadFile";
 
 const SyncProducts = () => {
-  return (
-    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
-        Sync PRoducts
-      
-    </main>
-  )
-}
 
-export default SyncProducts
+
+  return (
+    <main className="p-4 flex items-center justify-center">
+      <UploadFile/>
+    </main>
+  );
+};
+
+export default SyncProducts;
