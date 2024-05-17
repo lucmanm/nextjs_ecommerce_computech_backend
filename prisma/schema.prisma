@@ -72,7 +72,6 @@ model Brand {
   imageUrl     String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
-  languageId   String
   product      Product[]
   languageCode String
   language     Language  @relation(fields: [languageCode], references: [languageCode])
