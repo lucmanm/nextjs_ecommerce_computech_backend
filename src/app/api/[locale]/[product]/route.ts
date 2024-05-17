@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { locale: string, product: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { locale: string, product: string } }) {
     const { product, locale } = params
     const productmodel = decodeURIComponent(product.replace(/\\s+/g, ""))
 
@@ -20,6 +20,7 @@ export async function GET(request: Request, { params }: { params: { locale: stri
             else {
                 return NextResponse.json({ "Error": "Page not Found" }, { status: 500 } )
             }
+            
     } catch (error) {
         console.log("ERROR_API_GET_PRODUCT_AND_BRAND", error);
     }

@@ -2,11 +2,12 @@ import { prisma } from "@/lib/db";
 import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: { locale: string, category_or_brand: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { locale: string, product: string, category_or_brand: string } }) {
 
-    const { locale, category_or_brand } = params
+    const { locale, category_or_brand, product } = params
     const searchParams = request.nextUrl.searchParams
     const querySkip = searchParams.get("skip")
+
 
 
     try {
@@ -17,12 +18,12 @@ export async function GET(request: NextRequest, { params }: { params: { locale: 
         if (!checklanguage) {
             console.log("LANGUAGE_ERROR_UNAVAILABLE", error);
         }
-        
+
         const result = await prisma.product.findMany({
             where: {
                 AND: [
                     {
-                        categoryName: {
+                        groupName: {
                             contains: category_or_brand,
                             mode: "insensitive"
                         }
@@ -31,7 +32,7 @@ export async function GET(request: NextRequest, { params }: { params: { locale: 
             },
             skip: 0 | Number(querySkip),
             take: 5,
-            orderBy:{
+            orderBy: {
                 updatedAt: "asc"
             }
         })
