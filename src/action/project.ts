@@ -40,7 +40,7 @@ export async function createBulkProduct(jsonData: TCreateBulkProductProps[]) {
     await prisma.groupProduct.createMany({
         data: jsonData.map(data => ({
             name: data.group_name,
-            l
+            languagecode: "en"
         })),
         skipDuplicates: true
     })

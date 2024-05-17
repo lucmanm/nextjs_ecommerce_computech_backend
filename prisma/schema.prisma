@@ -119,10 +119,10 @@ model Slider {
 }
 
 model Language {
-  languageCode String         @unique @default("en")
+  languageCode String         @unique 
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  languageName String         @unique @default("English")
+  languageName String         @unique 
   Brand        Brand[]
   Category     Category[]
   Slider       Slider[]

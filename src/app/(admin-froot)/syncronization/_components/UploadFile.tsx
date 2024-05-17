@@ -14,7 +14,7 @@ export default function UploadFile() {
 
   // const [jsonData, setJsonData] = useState("");
 
-  async function onSave() {
+   function onSave() {
     if (file) {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -30,7 +30,7 @@ export default function UploadFile() {
             XLSX.utils.sheet_to_json(workSheet);
           try {
             //Save to the DB
-            const jsonData = JSON.parse(JSON.stringify(json));
+            const jsonData =  JSON.parse(JSON.stringify(json));
             await createBulkProduct(jsonData);
             toast({
               variant: "success",
@@ -47,7 +47,9 @@ export default function UploadFile() {
 
   return (
     <section className="w-1/4 space-y-6 ">
-      <form action={onSave} className="flex flex-col gap-y-4">
+      <form action={async () =>{
+         onSave()
+      }} className="flex flex-col gap-y-4">
         <Input
           type="file"
           accept=".xls, .xlsx"
