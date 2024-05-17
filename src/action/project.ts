@@ -1,9 +1,61 @@
 "use server"
 import { prisma } from "@/lib/db"
-import { Item } from "@radix-ui/react-dropdown-menu"
-import { Vault } from "lucide-react"
 import * as z from "zod"
+const brandData = [
+    {
+        name: "hp",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983065/brand-logo/czutgsnq992umlv3vdob.png",
+        language: "en"
+    },
+    {
+        name: "dell",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983064/brand-logo/pbsjvolw1tiuvaobacnc.png",
+        language: "en"
+    },
+    {
+        name: "apc",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983068/brand-logo/l2uvjyief9dmqinrnyqt.jpg",
+        language: "en"
+    },
+    {
+        name: "benq",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983069/brand-logo/dzz7hicdbhxaerequt8y.jpg",
+        language: "en"
+    },
+    {
+        name: "logitech",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983067/brand-logo/rn61fpk1zftrleypqlxd.jpg",
+        language: "en"
+    },
+    {
+        name: "arktek",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983068/brand-logo/tnvatklwpw0fpdaqgln2.jpg",
+        language: "en"
+    },
+]
 
+const slidersData = [
+    {
+        title: "all ine one Desktop",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1703715596/tqxthitfbhentrkyb2jo.png",
+        language: "en"
+    },
+    {
+        title: "laptop",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1703715528/xbu9zba2mkgxoepgbmld.png",
+        language: "en"
+    },
+    {
+        title: "desktop",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1694624393/vv7a4uronw2d7ppwzn92.png",
+        language: "en"
+    },
+    {
+        title: "Storage, Memory Etc.",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1694624385/ll4cq8l7i0gdotsbm6jy.png",
+        language: "en"
+    },
+]
 
 // export type TCreateBulkProductProps = {
 //     description_ar: string
@@ -32,11 +84,30 @@ const productSchema = z.object({
 
 export type TCreateBulkProductProps = z.infer<typeof productSchema>
 
+
+
 export async function createBulkProduct(jsonData: TCreateBulkProductProps[]) {
 
     // select only the category name or group data
     // const uniqueGroupName = Array.from(new Set(jsonData.map(item => item)))
-    
+
+    await prisma.brand.createMany({
+        data: brandData.map(data => ({
+            name: data.name,
+            imageUrl: data.url,
+            languageCode: data.language
+        })),
+        skipDuplicates: true
+    })
+
+    await prisma.slider.createMany({
+        data: slidersData.map(({url, title, language}) => ({
+            name: title,
+            imageUrl: url,
+            languageCode:  language
+        }))
+    })
+
     await prisma.groupProduct.createMany({
         data: jsonData.map(data => ({
             name: data.group_name,

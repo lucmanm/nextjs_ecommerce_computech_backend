@@ -1,7 +1,11 @@
 import { prisma } from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: { params: { locale: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { locale: string } }) {
+
+    const searchParams = request.nextUrl.searchParams
+    const category = searchParams.get("category")
+
     const checklanguage = await prisma.language.findFirst({
         where: {
             languageCode: params.locale
@@ -14,7 +18,7 @@ export async function GET(request: Request, { params }: { params: { locale: stri
     const productsData = await prisma.product.findMany({
         where: {
             groupName: {
-                contains: "pc",
+                contains: category?.toString(),
                 mode: "insensitive"
             }
         },

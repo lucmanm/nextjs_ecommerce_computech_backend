@@ -9,12 +9,8 @@ export async function GET(request: NextRequest, { params }: { params: { locale: 
         }
     })
 
-    const data = await prisma.brand.findMany({
-        where: {
-            languageId: checklanguage?.languageCode
-        }
-    })
+    const result = await prisma.brand.findMany()
 
-    return NextResponse.json(data, { status: 200 })
+    return NextResponse.json({result}, { status: 200 })
 }
 
