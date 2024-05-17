@@ -17,6 +17,7 @@ import * as z from "zod"
 //     unit_price: number
 // }
 
+// headers of the excel must be the same as belows schema
 const bulkProductSchema = z.object({
     description_ar: z.string(),
     description_en: z.string(),
@@ -34,24 +35,57 @@ export type TCreateBulkProductProps = z.infer<typeof bulkProductSchema>
 export async function createBulkProduct(jsonData: TCreateBulkProductProps[]) {
 
     // select only the category name or group data
-    const uniqueGroupName = Array.from(new Set(jsonData.map(item => item.group_name)))
-    // console.log(uniqueGroupName);
-
-    // get call category data
-    const getAllCategory = await prisma.category.findMany();
-
-    // map the data
-    const existingCategories = getAllCategory.map(category => category.name)
-    
-    // get all the data that doesnt match from database
-    const newCategoryNames = uniqueGroupName.filter(name => !existingCategories.includes(name))
+    const uniqueGroupName = Array.from(new Set(jsonData.map(item => item)))
 
     await prisma.category.createMany({
-        data: newCategoryNames.map(data => ({
-            name: data,
+        data: uniqueGroupName.map(data => ({
+            name: data.group_name,
             languageCode: "en-us"
-        }))
-
+        })),
+        skipDuplicates: true
     })
-    
+
+    // get call category data
+    // const getAllCategory = await prisma.category.findMany();
+
+    // list the category by map
+    // const existingCategories = getAllCategory.map(category => category.name)
+
+    // filter if there is a  duplicates if there is a duplicates will return as a single value and rest of the data
+    // const newCategoryNames = uniqueGroupName.filter(({ group_name }) => !existingCategories.includes(group_name))
+
+    // await prisma.category.createMany({
+    //     data: newCategoryNames.map(data => ({
+    //         name: data.group_name,
+    //         languageCode: "en-us"
+    //     }))
+    // })
+
+
+    // get all in products listing
+    const getAllProducts = await prisma.product.findMany()
+
+    // lists the products by map
+    const productLists = getAllProducts.map(({ model }) => model)
+
+    // filter if there is a  duplicates if there is a duplicates will return as a single value and rest of the data
+    const newProductLists = uniqueGroupName.filter(data => !productLists.includes(data.model))
+
+    // desctructure the data    
+
+    await prisma.product.createMany({
+        data: newProductLists.map(data => ({
+            model: data.model,
+            price: data.unit_price,
+            shortDescriptionAr: data.description_ar,
+            shortDescriptionEn: data.description_en,
+            stock: data.total_stock,
+            taxValue: "15.00",
+            categoryName: data.group_name,
+            isFeatured: false,
+            isLive: true,
+        })),
+        skipDuplicates: true
+    })
+
 }

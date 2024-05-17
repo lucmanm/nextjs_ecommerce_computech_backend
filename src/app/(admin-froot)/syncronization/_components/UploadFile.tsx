@@ -2,16 +2,18 @@
 
 import React, { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 // xlsx library
 import * as XLSX from "xlsx";
 import { createBulkProduct, TCreateBulkProductProps } from "@/action/project";
 import { toast } from "@/components/ui/use-toast";
+import { useFormStatus } from "react-dom";
+import CustomButtom from "@/components/CustomButtom";
+import { Button } from "@/components/ui/button";
 
 export default function UploadFile() {
   const [file, setFile] = useState<File | null>(null);
+
   // const [jsonData, setJsonData] = useState("");
 
   async function onSave() {
@@ -26,19 +28,18 @@ export default function UploadFile() {
           // Worksheet
           const workSheet = workbook.Sheets[sheetName];
           // Json
-          const json : TCreateBulkProductProps[] =
+          const json: TCreateBulkProductProps[] =
             XLSX.utils.sheet_to_json(workSheet);
           try {
             //Save to the DB
-            const jsonData = JSON.parse(JSON.stringify(json))
+            const jsonData = JSON.parse(JSON.stringify(json));
             await createBulkProduct(jsonData);
             toast({
-              variant: "default",
-              description: "Succefully Syncronized"
-            })
-
+              variant: "success",
+              title: "Succefully Syncronized",
+            });
           } catch (error) {
-            console.log("ERROR_UPLOAD_FILE_EXCEL",error);
+            console.log("ERROR_UPLOAD_FILE_EXCEL", error);
           }
         }
       };
@@ -47,7 +48,7 @@ export default function UploadFile() {
   }
 
   return (
-    <section className="w-1/4 space-y-6">
+    <section className="w-1/4 space-y-6 ">
       <Input
         type="file"
         accept=".xls, .xlsx"
@@ -55,10 +56,7 @@ export default function UploadFile() {
       />
 
       <span>Accepts Excel File Format .xls & .xlsx</span>
-
-      <Button className="w-full" onClick={onSave}>
-        Upload
-      </Button>
+      <Button type="submit">Upload</Button>
     </section>
   );
 }
