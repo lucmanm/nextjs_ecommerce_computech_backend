@@ -32,6 +32,46 @@ const brandData = [
         url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983068/brand-logo/tnvatklwpw0fpdaqgln2.jpg",
         language: "en"
     },
+    {
+        name: "lexar",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983066/brand-logo/tcdsofy7ihv1yqhkqxtq.jpg",
+        language: "en"
+    },
+    {
+        name: "Mirosoft",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983067/brand-logo/loxatevaizinv9shkclr.jpg",
+        language: "en"
+    },
+    {
+        name: "zebra",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983063/brand-logo/khnyeahy17oc7yuvpc1v.jpg",
+        language: "en"
+    },
+    {
+        name: "Epos",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983065/brand-logo/ebijaeseimd5lwo5fqj1.png",
+        language: "en"
+    },
+    {
+        name: "Optoma",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983067/brand-logo/raflpoanb0gg0m37pi8n.jpg",
+        language: "en"
+    },
+    {
+        name: "tp-Link",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983069/brand-logo/uhtxyp3qxnngdhqlxkl8.jpg",
+        language: "en"
+    },
+    {
+        name: "Huawei",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983065/brand-logo/a3q1kfigavjiwpvjdxob.jpg",
+        language: "en"
+    },
+    {
+        name: "kaspersky",
+        url: "https://res.cloudinary.com/dzdcszrob/image/upload/v1715983066/brand-logo/cmgvpun4yqamzty4n5wg.png",
+        language: "en"
+    },
 ]
 
 const slidersData = [
