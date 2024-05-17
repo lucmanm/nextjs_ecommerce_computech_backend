@@ -67,7 +67,6 @@ CREATE TABLE "Brand" (
     "imageUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "languageId" TEXT NOT NULL,
     "languageCode" TEXT NOT NULL,
 
     CONSTRAINT "Brand_pkey" PRIMARY KEY ("id")
@@ -78,18 +77,30 @@ CREATE TABLE "Product" (
     "id" TEXT NOT NULL,
     "model" TEXT NOT NULL,
     "stock" INTEGER NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "isFeatured" BOOLEAN NOT NULL DEFAULT false,
     "isLive" BOOLEAN NOT NULL DEFAULT true,
     "price" DECIMAL(65,30) NOT NULL,
     "taxValue" DECIMAL(65,30) NOT NULL,
-    "brandId" TEXT NOT NULL,
-    "categoryId" TEXT NOT NULL,
+    "brandName" TEXT,
+    "categoryName" TEXT,
+    "groupName" TEXT NOT NULL,
     "shortDescriptionAr" TEXT NOT NULL,
     "shortDescriptionEn" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "GroupProduct" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "languagecode" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "GroupProduct_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -107,10 +118,10 @@ CREATE TABLE "Slider" (
 
 -- CreateTable
 CREATE TABLE "Language" (
-    "languageCode" TEXT NOT NULL,
+    "languageCode" TEXT NOT NULL DEFAULT 'en',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "languageName" TEXT NOT NULL
+    "languageName" TEXT NOT NULL DEFAULT 'English'
 );
 
 -- CreateIndex
@@ -135,7 +146,13 @@ CREATE UNIQUE INDEX "Product_shortDescriptionAr_key" ON "Product"("shortDescript
 CREATE UNIQUE INDEX "Product_shortDescriptionEn_key" ON "Product"("shortDescriptionEn");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "GroupProduct_name_key" ON "GroupProduct"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Language_languageCode_key" ON "Language"("languageCode");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Language_languageName_key" ON "Language"("languageName");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -150,10 +167,16 @@ ALTER TABLE "Category" ADD CONSTRAINT "Category_languageCode_fkey" FOREIGN KEY (
 ALTER TABLE "Brand" ADD CONSTRAINT "Brand_languageCode_fkey" FOREIGN KEY ("languageCode") REFERENCES "Language"("languageCode") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_brandId_fkey" FOREIGN KEY ("brandId") REFERENCES "Brand"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_brandName_fkey" FOREIGN KEY ("brandName") REFERENCES "Brand"("name") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryName_fkey" FOREIGN KEY ("categoryName") REFERENCES "Category"("name") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Product" ADD CONSTRAINT "Product_groupName_fkey" FOREIGN KEY ("groupName") REFERENCES "GroupProduct"("name") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "GroupProduct" ADD CONSTRAINT "GroupProduct_languagecode_fkey" FOREIGN KEY ("languagecode") REFERENCES "Language"("languageCode") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Slider" ADD CONSTRAINT "Slider_languageCode_fkey" FOREIGN KEY ("languageCode") REFERENCES "Language"("languageCode") ON DELETE SET NULL ON UPDATE CASCADE;

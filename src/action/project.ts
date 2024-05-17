@@ -22,10 +22,10 @@ const productSchema = z.object({
     description_ar: z.string(),
     description_en: z.string(),
     group_name: z.string(),
-    khumra_warehouse: z.number(),
+    main_warehouse: z.number(),
     model: z.coerce.string(),
-    sb_showroom: z.number(),
-    sm_warehouse: z.number(),
+    big_showroom: z.number(),
+    small_showroom: z.number(),
     total_stock: z.number(),
     unit_price: z.number(),
 })
@@ -37,10 +37,10 @@ export async function createBulkProduct(jsonData: TCreateBulkProductProps[]) {
     // select only the category name or group data
     // const uniqueGroupName = Array.from(new Set(jsonData.map(item => item)))
     
-    await prisma.category.createMany({
+    await prisma.groupProduct.createMany({
         data: jsonData.map(data => ({
             name: data.group_name,
-            languageCode: "en"
+            l
         })),
         skipDuplicates: true
     })
@@ -81,9 +81,10 @@ export async function createBulkProduct(jsonData: TCreateBulkProductProps[]) {
             shortDescriptionEn: data.description_en,
             stock: data.total_stock,
             taxValue: "15.00",
-            categoryName: data.group_name,
+            groupName: data.group_name,
             isFeatured: false,
             isLive: true,
+
         })),
         skipDuplicates: true
     })

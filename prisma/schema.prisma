@@ -78,21 +78,33 @@ model Brand {
 }
 
 model Product {
-  id                 String   @id @default(uuid())
-  model              String   @unique
+  id                 String       @id @default(uuid())
+  model              String       @unique
   stock              Int
-  isFeatured         Boolean  @default(false)
-  isLive             Boolean  @default(true)
+  isFeatured         Boolean      @default(false)
+  isLive             Boolean      @default(true)
   price              Decimal
   taxValue           Decimal
   brandName          String?
-  categoryName       String
-  shortDescriptionAr String   @unique
-  shortDescriptionEn String   @unique
-  Brand              Brand?   @relation(fields: [brandName], references: [name])
-  category           Category @relation(fields: [categoryName], references: [name])
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  categoryName       String?
+  groupName          String
+  shortDescriptionAr String       @unique
+  shortDescriptionEn String       @unique
+  Brand              Brand?       @relation(fields: [brandName], references: [name])
+  category           Category?    @relation(fields: [categoryName], references: [name])
+  groupProduct       GroupProduct @relation(fields: [groupName], references: [name])
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model GroupProduct {
+  id           String    @id @default(uuid())
+  name         String    @unique
+  language     Language  @relation(fields: [languagecode], references: [languageCode])
+  languagecode String    
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  Product      Product[]
 }
 
 model Slider {
@@ -107,11 +119,12 @@ model Slider {
 }
 
 model Language {
-  languageCode String     @unique
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  languageName String
+  languageCode String         @unique @default("en")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  languageName String         @unique @default("English")
   Brand        Brand[]
   Category     Category[]
   Slider       Slider[]
+  GroupProduct GroupProduct[]
 }
