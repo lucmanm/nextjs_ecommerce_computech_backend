@@ -7,9 +7,7 @@ import { Input } from "@/components/ui/input";
 import * as XLSX from "xlsx";
 import { createBulkProduct, TCreateBulkProductProps } from "@/action/project";
 import { toast } from "@/components/ui/use-toast";
-import { useFormStatus } from "react-dom";
-import CustomButtom from "@/components/CustomButtom";
-import { Button } from "@/components/ui/button";
+import CustomButtom from "@/app/(admin-froot)/syncronization/_components/UploadButton";
 
 export default function UploadFile() {
   const [file, setFile] = useState<File | null>(null);
@@ -49,14 +47,16 @@ export default function UploadFile() {
 
   return (
     <section className="w-1/4 space-y-6 ">
-      <Input
-        type="file"
-        accept=".xls, .xlsx"
-        onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
-      />
+      <form action={onSave} className="flex flex-col gap-y-4">
+        <Input
+          type="file"
+          accept=".xls, .xlsx"
+          onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
+        />
 
-      <span>Accepts Excel File Format .xls & .xlsx</span>
-      <Button type="submit">Upload</Button>
+        <span>Accepts Excel File Format .xls & .xlsx</span>
+        <CustomButtom/>
+      </form>
     </section>
   );
 }

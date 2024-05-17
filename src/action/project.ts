@@ -18,29 +18,29 @@ import * as z from "zod"
 // }
 
 // headers of the excel must be the same as belows schema
-const bulkProductSchema = z.object({
+const productSchema = z.object({
     description_ar: z.string(),
     description_en: z.string(),
     group_name: z.string(),
     khumra_warehouse: z.number(),
-    model: z.string(),
+    model: z.coerce.string(),
     sb_showroom: z.number(),
     sm_warehouse: z.number(),
     total_stock: z.number(),
     unit_price: z.number(),
 })
 
-export type TCreateBulkProductProps = z.infer<typeof bulkProductSchema>
+export type TCreateBulkProductProps = z.infer<typeof productSchema>
 
 export async function createBulkProduct(jsonData: TCreateBulkProductProps[]) {
 
     // select only the category name or group data
-    const uniqueGroupName = Array.from(new Set(jsonData.map(item => item)))
-
+    // const uniqueGroupName = Array.from(new Set(jsonData.map(item => item)))
+    
     await prisma.category.createMany({
-        data: uniqueGroupName.map(data => ({
+        data: jsonData.map(data => ({
             name: data.group_name,
-            languageCode: "en-us"
+            languageCode: "en"
         })),
         skipDuplicates: true
     })
@@ -63,19 +63,19 @@ export async function createBulkProduct(jsonData: TCreateBulkProductProps[]) {
 
 
     // get all in products listing
-    const getAllProducts = await prisma.product.findMany()
+    // const getAllProducts = await prisma.product.findMany()
 
     // lists the products by map
-    const productLists = getAllProducts.map(({ model }) => model)
+    // const productLists = getAllProducts.map(({ model }) => model)
 
     // filter if there is a  duplicates if there is a duplicates will return as a single value and rest of the data
-    const newProductLists = uniqueGroupName.filter(data => !productLists.includes(data.model))
+    // const newProductLists = uniqueGroupName.filter(data => !productLists.includes(data.model))
 
     // desctructure the data    
 
     await prisma.product.createMany({
-        data: newProductLists.map(data => ({
-            model: data.model,
+        data: jsonData.map(data => ({
+            model: data.model.toString(),
             price: data.unit_price,
             shortDescriptionAr: data.description_ar,
             shortDescriptionEn: data.description_en,

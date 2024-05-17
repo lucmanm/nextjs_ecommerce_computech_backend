@@ -5,13 +5,13 @@ export async function GET(request: NextRequest, { params }: { params: { locale: 
 
     const checklanguage = await prisma.language.findFirst({
         where: {
-            code: params.locale
+            languageCode: params.locale
         }
     })
 
     const sliderData = await prisma.slider.findMany({
         where: {
-            languageId: checklanguage?.id
+            languageCode: checklanguage?.languageCode
         },
     })
 

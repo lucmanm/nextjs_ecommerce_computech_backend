@@ -5,7 +5,7 @@ export async function GET(request: NextRequest,{ params }: { params: { locale: s
     
     const checklanguage = await prisma.language.findFirst({
         where: {
-            code: params.locale
+            languageCode: params.locale
         }
     })
 
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest,{ params }: { params: { locale: s
 
     const data = await prisma.category.findMany({
         where: {
-            languageId: checklanguage?.id
+            languageCode: checklanguage?.languageCode
         }
     })
 
