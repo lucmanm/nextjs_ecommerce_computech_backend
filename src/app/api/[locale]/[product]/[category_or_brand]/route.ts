@@ -7,7 +7,6 @@ export async function GET(request: NextRequest, { params }: { params: { locale: 
     const { locale, category_or_brand } = params
     const searchParams = request.nextUrl.searchParams
     const querySkip = searchParams.get("skip")
-    const queryTake = searchParams.get("take")
 
 
     try {
@@ -30,8 +29,8 @@ export async function GET(request: NextRequest, { params }: { params: { locale: 
                     }
                 ]
             },
-            skip: Number(querySkip),
-            take: Number(queryTake),
+            skip: 0 | Number(querySkip),
+            take: 5,
             orderBy:{
                 updatedAt: "asc"
             }
