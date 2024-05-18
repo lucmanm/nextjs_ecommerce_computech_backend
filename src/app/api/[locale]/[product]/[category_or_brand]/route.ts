@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, { params }: { params: { locale: 
                 ]
             },
             skip: 0 | Number(querySkip),
-            take: 5,
+            take: 10,
             orderBy: {
                 updatedAt: "asc"
             }
